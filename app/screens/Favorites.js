@@ -14,7 +14,7 @@ import { NavigationEvents } from 'react-navigation';
 
 import {firebaseApp} from '../utils/Firebase';
 import firebase from 'firebase/app';
-import 'firebase/firestore';
+import 'firebase/firestore';    
 const db = firebase.firestore(firebaseApp);
 
 export default function Favorites(props) {
@@ -24,6 +24,8 @@ export default function Favorites(props) {
     const [isVisibleLoading, setIsVisibleLoading] = useState(false);
     const [userLogged, setUserLogged] = useState(false);
     const toastRef = useRef();
+
+    console.log(restaurants);
   
     firebase.auth().onAuthStateChanged(user => {
         user ? setUserLogged(true) : setUserLogged(false);
@@ -39,24 +41,25 @@ export default function Favorites(props) {
                 .then(response => {
                     const idRestaurantsArray = [];
                     response.forEach(doc => {
-                        idRestaurantsArray.push(doc.data().idRestaurant)
+                        idRestaurantsArray.push(doc.data().idRestaurant);   
                     });
-                    getDataRestaurant(idRestaurantsArray).then(response => {
+
+                    getDataRestaurants(idRestaurantsArray).then(response => {
                         const restaurants = [];
                         response.forEach(doc => {
                             let restaurant = doc.data();
                             restaurant.id = doc.id;
                             restaurants.push(restaurant);
                         });
-                        setRestaurants(restaurants)
+                        setRestaurants(restaurants);
                     });
-                });
+                }); 
            
         }
         setReloadRestaurants(false);
     }, [reloadRestaurants]);
 
-    const getDataRestaurant = idRestaurantsArray => {
+    const getDataRestaurants = idRestaurantsArray => {
         const arrayRestaurants = [];
         idRestaurantsArray.forEach(idRestaurant => {
             const result = db.collection("restaurants")
@@ -91,8 +94,8 @@ export default function Favorites(props) {
                   setReloadRestaurants={setReloadRestaurants}
                   toastRef={toastRef}
                 />
-              )}
-              keyExtractor={(item, index) => index.toString()}
+                )}
+                keyExtractor={(item, index) => index.toString()}
             />
           ) : (
             <View style={styles.loaderRestaurants}>
@@ -108,9 +111,9 @@ export default function Favorites(props) {
 
 function Restaurant(props) {
     const {restaurant, navigation, setIsVisibleLoading, setReloadRestaurants, toastRef} = props;
-    console.log(restaurant);
     const {name, images, id} = restaurant.item;
     const [imageRestaurant, setImageRestaurant] = useState(null);
+    console.log(restaurant);    
    
 
     useEffect(() => {
@@ -161,12 +164,12 @@ function Restaurant(props) {
 
     return (
         <View style={styles.restaurant}>
-            <TouchableOpacity
+                 <TouchableOpacity
                 onPress={() => navigation.navigate("Restaurant", { restaurant: restaurant.item })}
             >
                 <Image
                     resizeMode="cover"
-                    source={{uri : imageRestaurant}}
+                    source={{uri : imageRestaurant ? imageRestaurant : ""}}
                     style={styles.image}
                     PlaceholderContent={<ActivityIndicator color="#fff" />}
                 />

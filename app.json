@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Blank Template",
+    "name": "5tenedores",
     "slug": "5_tenedores",
     "privacy": "public",
     "sdkVersion": "36.0.0",
@@ -15,7 +15,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#00a680"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -27,7 +27,12 @@
       "supportsTablet": true
     },
     "android": {
-      "permissions": ["CAMERA_ROLL", "LOCATION"]
-    }
+      "package": "matiaschattellino.cincotenedores",  
+      "permissions": [
+        "CAMERA_ROLL",
+        "LOCATION"
+      ]
+    },
+    "description": ""
   }
 }
